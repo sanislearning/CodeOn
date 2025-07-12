@@ -67,10 +67,10 @@ def extract_elements(code_str):
                 "type": "function",
                 "name": name,
                 "code_chunk": full_code,
-                "start_line": node.start_point[0] + 1,
-                "end_line": node.end_point[0] + 1,
                 "parent": parent,
-                "summary": docstring or "Function with no docstring"
+                "summary": docstring or "Function with no docstring",
+                "start_line": node.start_point[0] + 1,
+                "end_line": node.end_point[0] + 1
             })
             for child in node.children:
                 walk(child, parent_context)
@@ -97,7 +97,9 @@ def extract_elements(code_str):
                 "name": name,
                 "code_chunk": full_code,
                 "summary": summary,
-                "parent": parent
+                "parent": parent,
+                "start_line": node.start_point[0] + 1,
+                "end_line": node.end_point[0] + 1,
             })
             for child in node.children:
                 walk(child, parent_context)
@@ -112,7 +114,9 @@ def extract_elements(code_str):
                     "type": "comment",
                     "code_chunk": comment_text,
                     "summary": f"Comment: {comment_text.strip('# ').strip()}",
-                    "parent": parent
+                    "parent": parent,
+                    "start_line": node.start_point[0] + 1,
+                    "end_line": node.end_point[0] + 1,
                 })
             elif child.type == "call":
                 call_text = get_code_segment(code_bytes, child)
@@ -121,7 +125,9 @@ def extract_elements(code_str):
                     "type": "function_call",
                     "code_chunk": call_text,
                     "summary": f"Function call: {call_text}",
-                    "parent": parent
+                    "parent": parent,
+                    "start_line": node.start_point[0] + 1,
+                    "end_line": node.end_point[0] + 1,
                 })
 
         elif node.type == "assignment":
@@ -131,7 +137,9 @@ def extract_elements(code_str):
                 "type": "assignment",
                 "code_chunk": code_snippet,
                 "summary": f"Variable assignment: {code_snippet}",
-                "parent": parent
+                "parent": parent,
+                "start_line": node.start_point[0] + 1,
+                "end_line": node.end_point[0] + 1,
             })
 
         for child in node.children:
