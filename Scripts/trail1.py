@@ -157,14 +157,39 @@ def build_faiss_from_chunks(chunks):
 
 # ============================ MAIN ============================
 
+def process_file(filepath):
+    code = load_code_from_file(filepath)
+    elements = extract_elements(code)
+    for elem in elements:
+        elem["filename"] = filepath  # 🗂️ Add filename to chunk metadata
+    return elements
+
+def process_directory(dirpath):
+    print(f"📁 Scanning directory: {dirpath}")
+    all_chunks = []
+    for root, _, files in os.walk(dirpath):
+        for file in files:
+            if file.endswith(".py"):
+                full_path = os.path.join(root, file)
+                all_chunks.extend(process_file(full_path))
+    return all_chunks
+
 if __name__ == "__main__":
     print("🚀 Starting code indexing...")
     if len(sys.argv) < 2:
-        print("❌ Usage: python code_indexer.py <path_to_python_file>")
+        print("❌ Usage: python code_indexer.py <file_or_folder_path>")
         sys.exit(1)
 
-    filepath = sys.argv[1]
-    code = load_code_from_file(filepath)
-    elements = extract_elements(code)
-    build_faiss_from_chunks(elements)
+    input_path = sys.argv[1]
+    all_elements = []
+
+    if os.path.isdir(input_path):
+        all_elements = process_directory(input_path)
+    elif os.path.isfile(input_path) and input_path.endswith(".py"):
+        all_elements = process_file(input_path)
+    else:
+        print("❌ Invalid input. Please provide a .py file or a folder.")
+        sys.exit(1)
+
+    build_faiss_from_chunks(all_elements)
     print("🏁 Done!")

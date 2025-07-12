@@ -14,14 +14,14 @@ load_dotenv()
 print("🧠 Initializing embedding model for retrieval...")
 embedding = HuggingFaceEmbeddings(
     model_name="sentence-transformers/all-MiniLM-L6-v2",
-    model_kwargs={"device": "cpu"}
+    model_kwargs={"device": "cpu"} #laptop has no gpu
 )
 
 print("🔍 Loading FAISS vector database...")
 vectordb = FAISS.load_local(
     "code_index_faiss",
     embedding,
-    allow_dangerous_deserialization=True
+    allow_dangerous_deserialization=True #need this active so langchain doesn't stop me because of pickle
 )
 
 retriever = vectordb.as_retriever(search_kwargs={"k": 10})
