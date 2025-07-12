@@ -1,0 +1,343 @@
+[
+  {
+    "type": "class",
+    "name": "Node",
+    "code_chunk": "class Node:\n    def __init__(self,data):\n        self.data=data\n        self.next=None",
+    "summary": "Class `Node` with methods or properties.",
+    "parent": null
+  },
+  {
+    "type": "function",
+    "name": "__init__",
+    "code_chunk": "def __init__(self,data):\n        self.data=data\n        self.next=None",
+    "start_line": 2,
+    "end_line": 4,
+    "parent": "Node",
+    "summary": "Function with no docstring"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "self.data=data",
+    "summary": "Variable assignment: self.data=data",
+    "parent": "__init__"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "self.next=None",
+    "summary": "Variable assignment: self.next=None",
+    "parent": "__init__"
+  },
+  {
+    "type": "class",
+    "name": "LinkedList",
+    "code_chunk": "class LinkedList:\n    def __init__(self):\n        self.head=None\n        \n    def insert(self,data):\n        new_node=Node(data)\n        if self.head is None:\n            self.head=new_node\n            return\n        current=self.head\n        while current.next:\n            current=current.next\n        current.next=new_node\n\n    def delete(self,key):\n        temp=self.head\n        if temp and temp.data==key:\n            self.head=temp.next\n            temp=None\n            return\n        prev=None\n        while temp and temp.data!=key:\n            prev=temp\n            temp=temp.next\n        if not temp:\n            print(f\"{key} not found in the linked list.\")\n            return\n        prev.next=temp.next\n        temp=None\n\n    def update(self,old_value,new_value):\n        temp=self.head\n        while temp:\n            if temp.data==old_value:\n                temp.data=new_value\n                return\n            temp=temp.next\n        print(f\"{old_value} is not present in the list.\")\n        \n    def display(self):\n        temp=self.head\n        while temp:\n            print(temp.data,end=\"->\")\n            temp=temp.next\n        print(\"None\")",
+    "summary": "Class `LinkedList` with methods or properties.",
+    "parent": null
+  },
+  {
+    "type": "function",
+    "name": "__init__",
+    "code_chunk": "def __init__(self):\n        self.head=None",
+    "start_line": 7,
+    "end_line": 8,
+    "parent": "LinkedList",
+    "summary": "Function with no docstring"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "self.head=None",
+    "summary": "Variable assignment: self.head=None",
+    "parent": "__init__"
+  },
+  {
+    "type": "function",
+    "name": "insert",
+    "code_chunk": "def insert(self,data):\n        new_node=Node(data)\n        if self.head is None:\n            self.head=new_node\n            return\n        current=self.head\n        while current.next:\n            current=current.next\n        current.next=new_node",
+    "start_line": 10,
+    "end_line": 18,
+    "parent": "LinkedList",
+    "summary": "Function with no docstring"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "new_node=Node(data)",
+    "summary": "Variable assignment: new_node=Node(data)",
+    "parent": "insert"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "self.head=new_node",
+    "summary": "Variable assignment: self.head=new_node",
+    "parent": "insert"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "current=self.head",
+    "summary": "Variable assignment: current=self.head",
+    "parent": "insert"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "current=current.next",
+    "summary": "Variable assignment: current=current.next",
+    "parent": "insert"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "current.next=new_node",
+    "summary": "Variable assignment: current.next=new_node",
+    "parent": "insert"
+  },
+  {
+    "type": "function",
+    "name": "delete",
+    "code_chunk": "def delete(self,key):\n        temp=self.head\n        if temp and temp.data==key:\n            self.head=temp.next\n            temp=None\n            return\n        prev=None\n        while temp and temp.data!=key:\n            prev=temp\n            temp=temp.next\n        if not temp:\n            print(f\"{key} not found in the linked list.\")\n            return\n        prev.next=temp.next\n        temp=None",
+    "start_line": 20,
+    "end_line": 34,
+    "parent": "LinkedList",
+    "summary": "Function with no docstring"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "temp=self.head",
+    "summary": "Variable assignment: temp=self.head",
+    "parent": "delete"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "self.head=temp.next",
+    "summary": "Variable assignment: self.head=temp.next",
+    "parent": "delete"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "temp=None",
+    "summary": "Variable assignment: temp=None",
+    "parent": "delete"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "prev=None",
+    "summary": "Variable assignment: prev=None",
+    "parent": "delete"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "prev=temp",
+    "summary": "Variable assignment: prev=temp",
+    "parent": "delete"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "temp=temp.next",
+    "summary": "Variable assignment: temp=temp.next",
+    "parent": "delete"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "print(f\"{key} not found in the linked list.\")",
+    "summary": "Function call: print(f\"{key} not found in the linked list.\")",
+    "parent": "delete"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "prev.next=temp.next",
+    "summary": "Variable assignment: prev.next=temp.next",
+    "parent": "delete"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "temp=None",
+    "summary": "Variable assignment: temp=None",
+    "parent": "delete"
+  },
+  {
+    "type": "function",
+    "name": "update",
+    "code_chunk": "def update(self,old_value,new_value):\n        temp=self.head\n        while temp:\n            if temp.data==old_value:\n                temp.data=new_value\n                return\n            temp=temp.next\n        print(f\"{old_value} is not present in the list.\")",
+    "start_line": 36,
+    "end_line": 43,
+    "parent": "LinkedList",
+    "summary": "Function with no docstring"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "temp=self.head",
+    "summary": "Variable assignment: temp=self.head",
+    "parent": "update"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "temp.data=new_value",
+    "summary": "Variable assignment: temp.data=new_value",
+    "parent": "update"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "temp=temp.next",
+    "summary": "Variable assignment: temp=temp.next",
+    "parent": "update"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "print(f\"{old_value} is not present in the list.\")",
+    "summary": "Function call: print(f\"{old_value} is not present in the list.\")",
+    "parent": "update"
+  },
+  {
+    "type": "function",
+    "name": "display",
+    "code_chunk": "def display(self):\n        temp=self.head\n        while temp:\n            print(temp.data,end=\"->\")\n            temp=temp.next\n        print(\"None\")",
+    "start_line": 45,
+    "end_line": 50,
+    "parent": "LinkedList",
+    "summary": "Function with no docstring"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "temp=self.head",
+    "summary": "Variable assignment: temp=self.head",
+    "parent": "display"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "print(temp.data,end=\"->\")",
+    "summary": "Function call: print(temp.data,end=\"->\")",
+    "parent": "display"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "temp=temp.next",
+    "summary": "Variable assignment: temp=temp.next",
+    "parent": "display"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "print(\"None\")",
+    "summary": "Function call: print(\"None\")",
+    "parent": "display"
+  },
+  {
+    "type": "function",
+    "name": "main",
+    "code_chunk": "def main():\n    ll = LinkedList()\n    while True:\n        print(\"\\nChoose an option:\")\n        print(\"1. Insert\")\n        print(\"2. Delete\")\n        print(\"3. Update\")\n        print(\"4. Display\")\n        print(\"5. Exit\")\n\n        choice = input(\"Enter your choice (1-5): \")\n\n        if choice == '1':\n            data = int(input(\"Enter value to insert: \"))\n            ll.insert(data)\n        elif choice == '2':\n            key = int(input(\"Enter value to delete: \"))\n            ll.delete(key)\n        elif choice == '3':\n            old = int(input(\"Enter value to update: \"))\n            new = int(input(\"Enter new value: \"))\n            ll.update(old, new)\n        elif choice == '4':\n            ll.display()\n        elif choice == '5':\n            print(\"Exiting...\")\n            break\n        else:\n            print(\"Invalid choice. Please enter 1 to 5.\")",
+    "start_line": 52,
+    "end_line": 80,
+    "parent": null,
+    "summary": "Function with no docstring"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "ll = LinkedList()",
+    "summary": "Variable assignment: ll = LinkedList()",
+    "parent": "main"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "print(\"\\nChoose an option:\")",
+    "summary": "Function call: print(\"\\nChoose an option:\")",
+    "parent": "main"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "print(\"1. Insert\")",
+    "summary": "Function call: print(\"1. Insert\")",
+    "parent": "main"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "print(\"2. Delete\")",
+    "summary": "Function call: print(\"2. Delete\")",
+    "parent": "main"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "print(\"3. Update\")",
+    "summary": "Function call: print(\"3. Update\")",
+    "parent": "main"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "print(\"4. Display\")",
+    "summary": "Function call: print(\"4. Display\")",
+    "parent": "main"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "print(\"5. Exit\")",
+    "summary": "Function call: print(\"5. Exit\")",
+    "parent": "main"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "choice = input(\"Enter your choice (1-5): \")",
+    "summary": "Variable assignment: choice = input(\"Enter your choice (1-5): \")",
+    "parent": "main"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "data = int(input(\"Enter value to insert: \"))",
+    "summary": "Variable assignment: data = int(input(\"Enter value to insert: \"))",
+    "parent": "main"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "ll.insert(data)",
+    "summary": "Function call: ll.insert(data)",
+    "parent": "main"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "key = int(input(\"Enter value to delete: \"))",
+    "summary": "Variable assignment: key = int(input(\"Enter value to delete: \"))",
+    "parent": "main"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "ll.delete(key)",
+    "summary": "Function call: ll.delete(key)",
+    "parent": "main"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "old = int(input(\"Enter value to update: \"))",
+    "summary": "Variable assignment: old = int(input(\"Enter value to update: \"))",
+    "parent": "main"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "new = int(input(\"Enter new value: \"))",
+    "summary": "Variable assignment: new = int(input(\"Enter new value: \"))",
+    "parent": "main"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "ll.update(old, new)",
+    "summary": "Function call: ll.update(old, new)",
+    "parent": "main"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "ll.display()",
+    "summary": "Function call: ll.display()",
+    "parent": "main"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "print(\"Exiting...\")",
+    "summary": "Function call: print(\"Exiting...\")",
+    "parent": "main"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "print(\"Invalid choice. Please enter 1 to 5.\")",
+    "summary": "Function call: print(\"Invalid choice. Please enter 1 to 5.\")",
+    "parent": "main"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "main()",
+    "summary": "Function call: main()",
+    "parent": null
+  }
+]

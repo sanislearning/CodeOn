@@ -1,29 +1,36 @@
-import tree_sitter_python as tspython
-from tree_sitter import Language, Parser
-from dotenv import load_dotenv
-import google.generativeai as genai
 import os
 import sys
 import json
+from dotenv import load_dotenv
+from tree_sitter import Language, Parser
+import tree_sitter_python as tspython
 
-#llm for code summarization
+from langchain_core.documents import Document
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
+
+# ========================== CONFIG ==========================
+print("🔧 Loading environment variables...")
 load_dotenv()
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-model=genai.GenerativeModel('gemini-2.0-flash')
 
-#parser that makes the AST tree
+print("🧠 Initializing embedding model...")
+embedding = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-MiniLM-L6-v2",
+    model_kwargs={"device": "cpu"}
+)
+
+print("🌲 Setting up Tree-sitter Python parser...")
 PY_LANGUAGE = Language(tspython.language())
 parser = Parser(PY_LANGUAGE)
 
-#code to load stuff from a file path we give
-def load_code_from_file(filepath):
-    with open(filepath,'r',encoding='utf-8') as f:
-        return f.read()
+# ========================== HELPERS ==========================
 
-def generate_summary(code_chunk):
-    prompt=f"Explain clearly what this Python code does in a summarised and understandable manner :\n\n{code_chunk}"
-    response=model.generate_content(prompt)
-    return response.text.strip()
+def load_code_from_file(filepath):
+    print(f"📂 Loading code from file: {filepath}")
+    with open(filepath, 'r', encoding='utf-8') as f:
+        code = f.read()
+    print(f"✅ Code loaded from {filepath} ({len(code)} characters)")
+    return code
 
 def get_code_segment(code_bytes, node):
     return code_bytes[node.start_byte:node.end_byte].decode()
@@ -35,67 +42,45 @@ def extract_docstring_from_body(body_node, code_bytes):
             return get_code_segment(code_bytes, expr_node.children[0])
     return None
 
-def generate_file_summary(code_str):
-    prompt = f"Summarize what this entire Python file is doing clearly and concisely:\n\n{code_str}"
-    response = model.generate_content(prompt)
-    return response.text.strip()
-
-def generate_summary_with_context(code_chunk, file_summary):
-    prompt = (
-        "You are analyzing a piece of Python code in the context of a larger program.\n"
-        f"The entire file does the following:\n{file_summary}\n\n"
-        f"Explain what the following specific code does in that context:\n\n{code_chunk}\n"
-        "Respond clearly and concisely."
-    )
-    response = model.generate_content(prompt)
-    return response.text.strip()
-
+# ======================= CODE PARSING ========================
 
 def extract_elements(code_str):
-    file_summary = generate_file_summary(code_str)
+    print("🔍 Parsing code and extracting elements...")
     code_bytes = code_str.encode()
-    tree = parser.parse(code_bytes) #creates a AST f the input code
+    tree = parser.parse(code_bytes)
     root_node = tree.root_node
-
     elements = []
 
-    def walk(node,parent=None):
+    def walk(node, parent=None):
         if node.type == "function_definition":
             name_node = node.child_by_field_name("name")
             params_node = node.child_by_field_name("parameters")
             body_node = node.child_by_field_name("body")
 
             name = get_code_segment(code_bytes, name_node)
-            params = [
-                get_code_segment(code_bytes, child)
-                for child in params_node.children
-                if child.type == "identifier"
-            ]
-            body_code = get_code_segment(code_bytes, body_node)
             full_code = get_code_segment(code_bytes, node)
             docstring = extract_docstring_from_body(body_node, code_bytes)
 
-            parent_context = name  # use function name as parent
+            parent_context = name
+            print(f"🔧 Found function: {name}")
             elements.append({
                 "type": "function",
                 "name": name,
                 "code_chunk": full_code,
-                "summary": generate_summary_with_context(full_code, file_summary),
                 "start_line": node.start_point[0] + 1,
                 "end_line": node.end_point[0] + 1,
-                "parent": parent
+                "parent": parent,
+                "summary": docstring or "Function with no docstring"
             })
             for child in node.children:
                 walk(child, parent_context)
             return
-
 
         elif node.type == "class_definition":
             name_node = node.child_by_field_name("name")
             body_node = node.child_by_field_name("body")
 
             name = get_code_segment(code_bytes, name_node)
-            body_code = get_code_segment(code_bytes, body_node)
             full_code = get_code_segment(code_bytes, node)
             docstring = extract_docstring_from_body(body_node, code_bytes)
 
@@ -106,6 +91,7 @@ def extract_elements(code_str):
                 summary += " with methods or properties."
 
             parent_context = name
+            print(f"🏛️ Found class: {name}")
             elements.append({
                 "type": "class",
                 "name": name,
@@ -117,11 +103,11 @@ def extract_elements(code_str):
                 walk(child, parent_context)
             return
 
-
         elif node.type == "expression_statement":
             child = node.children[0]
             if child.type == "comment":
                 comment_text = get_code_segment(code_bytes, child)
+                print(f"💬 Found comment")
                 elements.append({
                     "type": "comment",
                     "code_chunk": comment_text,
@@ -130,6 +116,7 @@ def extract_elements(code_str):
                 })
             elif child.type == "call":
                 call_text = get_code_segment(code_bytes, child)
+                print(f"📞 Found function call")
                 elements.append({
                     "type": "function_call",
                     "code_chunk": call_text,
@@ -137,11 +124,9 @@ def extract_elements(code_str):
                     "parent": parent
                 })
 
-
-
-
         elif node.type == "assignment":
             code_snippet = get_code_segment(code_bytes, node)
+            print(f"📝 Found assignment")
             elements.append({
                 "type": "assignment",
                 "code_chunk": code_snippet,
@@ -149,23 +134,37 @@ def extract_elements(code_str):
                 "parent": parent
             })
 
-
-        # Recurse into child nodes
         for child in node.children:
-            walk(child,parent)
+            walk(child, parent)
 
     walk(root_node)
+    print(f"✅ Extracted {len(elements)} code elements")
     return elements
 
-if __name__=="__main__":
-    if len(sys.argv)<2: #A list that holds the terminal message
-        print("Add a file path after the trail1.py")
+# ======================= FAISS INDEXING ========================
+
+def build_faiss_from_chunks(chunks):
+    print("🧠 Creating FAISS index from extracted chunks...")
+    docs = [Document(page_content=chunk["code_chunk"], metadata=chunk) for chunk in chunks]
+    vectordb = FAISS.from_documents(docs, embedding)
+    vectordb.save_local("code_index_faiss")
+
+    print("💾 Saving metadata to index_metadata.json...")
+    with open("index_metadata.json", "w") as f:
+        json.dump(chunks, f, indent=2)
+
+    print(f"✅ Saved FAISS index and metadata for {len(docs)} chunks.")
+
+# ============================ MAIN ============================
+
+if __name__ == "__main__":
+    print("🚀 Starting code indexing...")
+    if len(sys.argv) < 2:
+        print("❌ Usage: python code_indexer.py <path_to_python_file>")
         sys.exit(1)
 
-    filepath=sys.argv[1] #sys.argv[0] is the name of the python script
-    #everything after is sys.argv[1]
-    code=load_code_from_file(filepath) #waow actual file path
-    elements=extract_elements(code)
-    for elem in elements:
-        print(json.dumps(elem,indent=2))
-        print("-"*40)
+    filepath = sys.argv[1]
+    code = load_code_from_file(filepath)
+    elements = extract_elements(code)
+    build_faiss_from_chunks(elements)
+    print("🏁 Done!")
