@@ -1,396 +1,134 @@
 [
   {
-    "type": "class",
-    "name": "Node",
-    "code_chunk": "class Node:\n    def __init__(self,data):\n        self.data=data\n        self.next=None",
-    "summary": "Class `Node` with methods or properties.",
+    "type": "function",
+    "name": "BinarySearch",
+    "code_chunk": "def BinarySearch(list1,low,high,key):\n    middle=(high+low)//2\n    if low>high:       #checks if search space is invalid\n        print(\"Value not present in list\")\n        return\n    elif list1[middle]==key:\n        print(f\"{key} has been found\")\n        return\n    elif list1[middle]>key:\n        high=middle-1\n        BinarySearch(list1,low,high,key)\n    elif list1[middle]<key:\n        low=middle+1\n        BinarySearch(list1,low,high,key)",
+    "start_line": 4,
+    "end_line": 17,
     "parent": null,
-    "filename": "LinkedList.py"
+    "summary": "Function with no docstring",
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "middle=(high+low)//2",
+    "summary": "Variable assignment: middle=(high+low)//2",
+    "parent": "BinarySearch",
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "print(\"Value not present in list\")",
+    "summary": "Function call: print(\"Value not present in list\")",
+    "parent": "BinarySearch",
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "print(f\"{key} has been found\")",
+    "summary": "Function call: print(f\"{key} has been found\")",
+    "parent": "BinarySearch",
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "high=middle-1",
+    "summary": "Variable assignment: high=middle-1",
+    "parent": "BinarySearch",
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "BinarySearch(list1,low,high,key)",
+    "summary": "Function call: BinarySearch(list1,low,high,key)",
+    "parent": "BinarySearch",
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "low=middle+1",
+    "summary": "Variable assignment: low=middle+1",
+    "parent": "BinarySearch",
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "BinarySearch(list1,low,high,key)",
+    "summary": "Function call: BinarySearch(list1,low,high,key)",
+    "parent": "BinarySearch",
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "list1=[1, 2, 3, 4, 10, 5, 23, 89, 10, 100, 33, 40, 12, 35, 15]",
+    "summary": "Variable assignment: list1=[1, 2, 3, 4, 10, 5, 23, 89, 10, 100, 33, 40, 12, 35, 15]",
+    "parent": null,
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "list1.sort()",
+    "summary": "Function call: list1.sort()",
+    "parent": null,
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "key=int(input())",
+    "summary": "Variable assignment: key=int(input())",
+    "parent": null,
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "BinarySearch(list1,0,len(list1)-1,key)",
+    "summary": "Function call: BinarySearch(list1,0,len(list1)-1,key)",
+    "parent": null,
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
   },
   {
     "type": "function",
-    "name": "__init__",
-    "code_chunk": "def __init__(self,data):\n        self.data=data\n        self.next=None",
+    "name": "LinearSearch",
+    "code_chunk": "def LinearSearch(list1): \n    key=int(input())\n    for i in range(0,len(list1)-1):\n        if list1[i]==key:\n            print(f\"{key} found at index {i}\")\n            return\n    print(\"Value not found\")\n    return",
     "start_line": 2,
-    "end_line": 4,
-    "parent": "Node",
-    "summary": "Function with no docstring",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "self.data=data",
-    "summary": "Variable assignment: self.data=data",
-    "parent": "__init__",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "self.next=None",
-    "summary": "Variable assignment: self.next=None",
-    "parent": "__init__",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "class",
-    "name": "LinkedList",
-    "code_chunk": "class LinkedList:\n    def __init__(self):\n        self.head=None\n        \n    def insert(self,data):\n        new_node=Node(data)\n        if self.head is None:\n            self.head=new_node\n            return\n        current=self.head\n        while current.next:\n            current=current.next\n        current.next=new_node\n\n    def delete(self,key):\n        temp=self.head\n        if temp and temp.data==key:\n            self.head=temp.next\n            temp=None\n            return\n        prev=None\n        while temp and temp.data!=key:\n            prev=temp\n            temp=temp.next\n        if not temp:\n            print(f\"{key} not found in the linked list.\")\n            return\n        prev.next=temp.next\n        temp=None\n\n    def update(self,old_value,new_value):\n        temp=self.head\n        while temp:\n            if temp.data==old_value:\n                temp.data=new_value\n                return\n            temp=temp.next\n        print(f\"{old_value} is not present in the list.\")\n        \n    def display(self):\n        temp=self.head\n        while temp:\n            print(temp.data,end=\"->\")\n            temp=temp.next\n        print(\"None\")",
-    "summary": "Class `LinkedList` with methods or properties.",
-    "parent": null,
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "function",
-    "name": "__init__",
-    "code_chunk": "def __init__(self):\n        self.head=None",
-    "start_line": 7,
-    "end_line": 8,
-    "parent": "LinkedList",
-    "summary": "Function with no docstring",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "self.head=None",
-    "summary": "Variable assignment: self.head=None",
-    "parent": "__init__",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "function",
-    "name": "insert",
-    "code_chunk": "def insert(self,data):\n        new_node=Node(data)\n        if self.head is None:\n            self.head=new_node\n            return\n        current=self.head\n        while current.next:\n            current=current.next\n        current.next=new_node",
-    "start_line": 10,
-    "end_line": 18,
-    "parent": "LinkedList",
-    "summary": "Function with no docstring",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "new_node=Node(data)",
-    "summary": "Variable assignment: new_node=Node(data)",
-    "parent": "insert",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "self.head=new_node",
-    "summary": "Variable assignment: self.head=new_node",
-    "parent": "insert",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "current=self.head",
-    "summary": "Variable assignment: current=self.head",
-    "parent": "insert",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "current=current.next",
-    "summary": "Variable assignment: current=current.next",
-    "parent": "insert",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "current.next=new_node",
-    "summary": "Variable assignment: current.next=new_node",
-    "parent": "insert",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "function",
-    "name": "delete",
-    "code_chunk": "def delete(self,key):\n        temp=self.head\n        if temp and temp.data==key:\n            self.head=temp.next\n            temp=None\n            return\n        prev=None\n        while temp and temp.data!=key:\n            prev=temp\n            temp=temp.next\n        if not temp:\n            print(f\"{key} not found in the linked list.\")\n            return\n        prev.next=temp.next\n        temp=None",
-    "start_line": 20,
-    "end_line": 34,
-    "parent": "LinkedList",
-    "summary": "Function with no docstring",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "temp=self.head",
-    "summary": "Variable assignment: temp=self.head",
-    "parent": "delete",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "self.head=temp.next",
-    "summary": "Variable assignment: self.head=temp.next",
-    "parent": "delete",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "temp=None",
-    "summary": "Variable assignment: temp=None",
-    "parent": "delete",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "prev=None",
-    "summary": "Variable assignment: prev=None",
-    "parent": "delete",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "prev=temp",
-    "summary": "Variable assignment: prev=temp",
-    "parent": "delete",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "temp=temp.next",
-    "summary": "Variable assignment: temp=temp.next",
-    "parent": "delete",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "function_call",
-    "code_chunk": "print(f\"{key} not found in the linked list.\")",
-    "summary": "Function call: print(f\"{key} not found in the linked list.\")",
-    "parent": "delete",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "prev.next=temp.next",
-    "summary": "Variable assignment: prev.next=temp.next",
-    "parent": "delete",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "temp=None",
-    "summary": "Variable assignment: temp=None",
-    "parent": "delete",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "function",
-    "name": "update",
-    "code_chunk": "def update(self,old_value,new_value):\n        temp=self.head\n        while temp:\n            if temp.data==old_value:\n                temp.data=new_value\n                return\n            temp=temp.next\n        print(f\"{old_value} is not present in the list.\")",
-    "start_line": 36,
-    "end_line": 43,
-    "parent": "LinkedList",
-    "summary": "Function with no docstring",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "temp=self.head",
-    "summary": "Variable assignment: temp=self.head",
-    "parent": "update",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "temp.data=new_value",
-    "summary": "Variable assignment: temp.data=new_value",
-    "parent": "update",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "temp=temp.next",
-    "summary": "Variable assignment: temp=temp.next",
-    "parent": "update",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "function_call",
-    "code_chunk": "print(f\"{old_value} is not present in the list.\")",
-    "summary": "Function call: print(f\"{old_value} is not present in the list.\")",
-    "parent": "update",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "function",
-    "name": "display",
-    "code_chunk": "def display(self):\n        temp=self.head\n        while temp:\n            print(temp.data,end=\"->\")\n            temp=temp.next\n        print(\"None\")",
-    "start_line": 45,
-    "end_line": 50,
-    "parent": "LinkedList",
-    "summary": "Function with no docstring",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "temp=self.head",
-    "summary": "Variable assignment: temp=self.head",
-    "parent": "display",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "function_call",
-    "code_chunk": "print(temp.data,end=\"->\")",
-    "summary": "Function call: print(temp.data,end=\"->\")",
-    "parent": "display",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "temp=temp.next",
-    "summary": "Variable assignment: temp=temp.next",
-    "parent": "display",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "function_call",
-    "code_chunk": "print(\"None\")",
-    "summary": "Function call: print(\"None\")",
-    "parent": "display",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "function",
-    "name": "main",
-    "code_chunk": "def main():\n    ll = LinkedList()\n    while True:\n        print(\"\\nChoose an option:\")\n        print(\"1. Insert\")\n        print(\"2. Delete\")\n        print(\"3. Update\")\n        print(\"4. Display\")\n        print(\"5. Exit\")\n\n        choice = input(\"Enter your choice (1-5): \")\n\n        if choice == '1':\n            data = int(input(\"Enter value to insert: \"))\n            ll.insert(data)\n        elif choice == '2':\n            key = int(input(\"Enter value to delete: \"))\n            ll.delete(key)\n        elif choice == '3':\n            old = int(input(\"Enter value to update: \"))\n            new = int(input(\"Enter new value: \"))\n            ll.update(old, new)\n        elif choice == '4':\n            ll.display()\n        elif choice == '5':\n            print(\"Exiting...\")\n            break\n        else:\n            print(\"Invalid choice. Please enter 1 to 5.\")",
-    "start_line": 52,
-    "end_line": 80,
+    "end_line": 9,
     "parent": null,
     "summary": "Function with no docstring",
-    "filename": "LinkedList.py"
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\LinearSearch.py"
   },
   {
     "type": "assignment",
-    "code_chunk": "ll = LinkedList()",
-    "summary": "Variable assignment: ll = LinkedList()",
-    "parent": "main",
-    "filename": "LinkedList.py"
+    "code_chunk": "key=int(input())",
+    "summary": "Variable assignment: key=int(input())",
+    "parent": "LinearSearch",
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\LinearSearch.py"
   },
   {
     "type": "function_call",
-    "code_chunk": "print(\"\\nChoose an option:\")",
-    "summary": "Function call: print(\"\\nChoose an option:\")",
-    "parent": "main",
-    "filename": "LinkedList.py"
+    "code_chunk": "print(f\"{key} found at index {i}\")",
+    "summary": "Function call: print(f\"{key} found at index {i}\")",
+    "parent": "LinearSearch",
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\LinearSearch.py"
   },
   {
     "type": "function_call",
-    "code_chunk": "print(\"1. Insert\")",
-    "summary": "Function call: print(\"1. Insert\")",
-    "parent": "main",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "function_call",
-    "code_chunk": "print(\"2. Delete\")",
-    "summary": "Function call: print(\"2. Delete\")",
-    "parent": "main",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "function_call",
-    "code_chunk": "print(\"3. Update\")",
-    "summary": "Function call: print(\"3. Update\")",
-    "parent": "main",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "function_call",
-    "code_chunk": "print(\"4. Display\")",
-    "summary": "Function call: print(\"4. Display\")",
-    "parent": "main",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "function_call",
-    "code_chunk": "print(\"5. Exit\")",
-    "summary": "Function call: print(\"5. Exit\")",
-    "parent": "main",
-    "filename": "LinkedList.py"
+    "code_chunk": "print(\"Value not found\")",
+    "summary": "Function call: print(\"Value not found\")",
+    "parent": "LinearSearch",
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\LinearSearch.py"
   },
   {
     "type": "assignment",
-    "code_chunk": "choice = input(\"Enter your choice (1-5): \")",
-    "summary": "Variable assignment: choice = input(\"Enter your choice (1-5): \")",
-    "parent": "main",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "data = int(input(\"Enter value to insert: \"))",
-    "summary": "Variable assignment: data = int(input(\"Enter value to insert: \"))",
-    "parent": "main",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "function_call",
-    "code_chunk": "ll.insert(data)",
-    "summary": "Function call: ll.insert(data)",
-    "parent": "main",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "key = int(input(\"Enter value to delete: \"))",
-    "summary": "Variable assignment: key = int(input(\"Enter value to delete: \"))",
-    "parent": "main",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "function_call",
-    "code_chunk": "ll.delete(key)",
-    "summary": "Function call: ll.delete(key)",
-    "parent": "main",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "old = int(input(\"Enter value to update: \"))",
-    "summary": "Variable assignment: old = int(input(\"Enter value to update: \"))",
-    "parent": "main",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "assignment",
-    "code_chunk": "new = int(input(\"Enter new value: \"))",
-    "summary": "Variable assignment: new = int(input(\"Enter new value: \"))",
-    "parent": "main",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "function_call",
-    "code_chunk": "ll.update(old, new)",
-    "summary": "Function call: ll.update(old, new)",
-    "parent": "main",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "function_call",
-    "code_chunk": "ll.display()",
-    "summary": "Function call: ll.display()",
-    "parent": "main",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "function_call",
-    "code_chunk": "print(\"Exiting...\")",
-    "summary": "Function call: print(\"Exiting...\")",
-    "parent": "main",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "function_call",
-    "code_chunk": "print(\"Invalid choice. Please enter 1 to 5.\")",
-    "summary": "Function call: print(\"Invalid choice. Please enter 1 to 5.\")",
-    "parent": "main",
-    "filename": "LinkedList.py"
-  },
-  {
-    "type": "function_call",
-    "code_chunk": "main()",
-    "summary": "Function call: main()",
+    "code_chunk": "list1=[1, 2, 3, 4, 10, 5, 23, 89, 10, 100, 33, 40, 12, 35, 15]",
+    "summary": "Variable assignment: list1=[1, 2, 3, 4, 10, 5, 23, 89, 10, 100, 33, 40, 12, 35, 15]",
     "parent": null,
-    "filename": "LinkedList.py"
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\LinearSearch.py"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "LinearSearch(list1)",
+    "summary": "Function call: LinearSearch(list1)",
+    "parent": null,
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\LinearSearch.py"
   }
 ]
