@@ -1,1 +1,27 @@
-def LinearSearch(list1, key):\n    list_length = len(list1)\n    if not list1:\n        return -1\n    for i in range(list_length):\n        if list1[i] == key:\n            return i\n    return -1\n    \nlist1=[100, 5, 23, 89, 10, 100, 33, 40, 12, 35, 15, 2, 3, 4, 1, 55, 66, 77, 88, 99, 101, 102, 103, 104]\nkey=int(input("Enter the key to search: "))\ngender = input("Enter your gender (male/female/other): ").lower()\nif gender == \"male\":\n    print(\"Hello, Sir!\")\nelif gender == \"female\":\n    print(\"Hello, Madam!\")\nelse:\n    print(\"Hello!\")\nindex = LinearSearch(list1, key)\nif index != -1:\n    print(f\"{key} found at index {index}\")\nelse:\n    print(\"Value not found\")
+def LinearSearch(list1, key):
+    """Performs a linear search on a list.
+
+    Args:
+        list1: The list to search.
+        key: The value to search for.
+
+    Returns:
+        The index of the key if found, otherwise -1.
+    """
+    list_length = len(list1)
+    if not list1:
+        return -1
+    for i in range(list_length):
+        if list1[i] == key:
+            return i
+    return -1
+    
+if __name__ == "__main__":
+    list1=[100, 5, 23, 89, 10, 100, 33, 40, 12, 35, 15, 2, 3, 4, 1, 55, 66, 77, 88, 99, 101, 102, 103, 104]
+    key=int(input("Enter the key to search: "))
+    print("Hello!")
+    index = LinearSearch(list1, key)
+    if index != -1:
+        print(f"{key} found at index {index}")
+    else:
+        print("Value not found")

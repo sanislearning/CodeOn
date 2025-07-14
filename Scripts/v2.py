@@ -178,55 +178,103 @@ IMPORTANT:
 
 
         response = model.generate_content(
-                    fix_prompt,
-                    generation_config=genai.GenerationConfig(
-                        temperature=0.1,
-                        max_output_tokens=8192,
-                        response_mime_type="application/json",  #This forces the response to be JSON only
+                        fix_prompt,
+                        generation_config=genai.GenerationConfig(
+                            temperature=0.1,
+                            max_output_tokens=8192,
+                            response_mime_type="application/json",  #This forces the response to be JSON only
+                        )
                     )
-                )
         return response.text.strip()
     except Exception as e:
         print(f"❌ Error during Gemini API call: {e}")
         return None
 
-# FIX #2: Replaced with the more resilient parsing function
+# ==============================================================================
+# ======================= START OF REPLACEMENT =================================
+# ==============================================================================
+
 def parse_fix_proposal(raw_response: str):
-    """Cleans and parses the JSON response from the LLM."""
+    """
+    A highly robust function to parse JSON from an LLM that may fail to properly
+    escape quotes within its code blocks.
+    """
     if not raw_response:
         print("❌ LLM returned an empty response.")
         return None
 
-    # Clean markdown fences if they exist
-    cleaned = raw_response
-    if cleaned.startswith("```json"):
-        cleaned = cleaned[7:]
-    if cleaned.endswith("```"):
-        cleaned = cleaned[:-3]
-    cleaned = cleaned.strip()
-
-    # Find the JSON block explicitly
-    start_index = cleaned.find('{')
-    end_index = cleaned.rfind('}') + 1
-
-    if start_index == -1 or end_index == 0:
-        print("❌ Could not find a JSON object in the LLM response.")
-        print(f"   Raw response (first 500 chars): {cleaned[:500]}...")
-        return None
-
-    json_str = cleaned[start_index:end_index]
+    # Clean potential markdown fences first, just in case.
+    if raw_response.startswith("```json"):
+        raw_response = raw_response[7:]
+    if raw_response.endswith("```"):
+        raw_response = raw_response[:-3]
+    raw_response = raw_response.strip()
 
     try:
-        data = json.loads(json_str)
-        # Basic validation
-        if "changes" not in data or not isinstance(data["changes"], list):
-            print("❌ Invalid JSON structure: Missing 'changes' array.")
-            return None
-        return data
+        # First, try to parse it directly. If it works, great!
+        return json.loads(raw_response)
     except json.JSONDecodeError as e:
-        print(f"❌ Failed to parse JSON response. Error: {e}")
-        print(f"   Extracted JSON string: {json_str}...")
+        print(f"⚠️ Initial JSON parse failed: {e}. Attempting robust extraction...")
+        # The initial parse failed, so we'll try to fix the string.
+
+    # This regex will find all instances of a "fixed_code" key and its value.
+    # It uses a non-greedy match to capture everything until the next key or end of object.
+    pattern = re.compile(r'"fixed_code":\s*"(.*?)"\s*(,|})', re.DOTALL)
+
+    last_end = 0
+    repaired_parts = []
+    matches_found = 0
+
+    for match in pattern.finditer(raw_response):
+        matches_found += 1
+        start, end = match.span()
+        code_start, code_end = match.span(1)
+
+        # Add the part of the string before this match
+        repaired_parts.append(raw_response[last_end:code_start])
+
+        # Get the captured code block
+        code_block = match.group(1)
+
+        # Escape the necessary characters for JSON
+        # 1. Escape backslashes first!
+        # 2. Escape double quotes.
+        # 3. Escape other common control characters.
+        escaped_code = code_block.replace('\\', '\\\\') \
+                                 .replace('"', '\\"') \
+                                 .replace('\n', '\\n') \
+                                 .replace('\r', '\\r') \
+                                 .replace('\t', '\\t')
+
+        repaired_parts.append(escaped_code)
+
+        # Update the last end position
+        last_end = code_end
+    
+    if matches_found == 0:
+        print("❌ No 'fixed_code' blocks found to repair. Parsing will likely fail.")
+        # Fall through to the final parse attempt with the original string.
+        repaired_json_str = raw_response
+    else:
+        # Add the remainder of the string after the last match
+        repaired_parts.append(raw_response[last_end:])
+        # Reassemble the string
+        repaired_json_str = "".join(repaired_parts)
+
+
+    try:
+        # Now, try to parse the repaired string
+        print("✅ Successfully repaired the JSON string. Parsing again...")
+        return json.loads(repaired_json_str)
+    except json.JSONDecodeError as final_e:
+        print(f"❌❌ Final attempt to parse JSON failed even after repair. Error: {final_e}")
+        print(f"--- Original Response (first 500 chars) ---\n{raw_response[:500]}...")
+        print(f"--- Repaired Response (first 500 chars) ---\n{repaired_json_str[:500]}...")
         return None
+
+# ==============================================================================
+# ======================== END OF REPLACEMENT ==================================
+# ==============================================================================
 
 def display_diff(original_content: str, new_content: str):
     diff = difflib.unified_diff(
@@ -273,20 +321,20 @@ def run_fix_command(path_or_dir: str, issue_description: str):
         print(f"\n[{i}/{len(fix_data['changes'])}] File: \033[1m{file_path}\033[0m")
 
         if not summary:
-            print("  - No detailed summary provided.")
+            print("   - No detailed summary provided.")
         for s in summary:
-            print(f"  - \033[94mLine ~{s.get('line', '?')}:\033[0m {s.get('description', 'N/A')}")
-            print(f"    \033[90mReason: {s.get('reason', 'N/A')}\033[0m")
+            print(f"   - \033[94mLine ~{s.get('line', '?')}:\033[0m {s.get('description', 'N/A')}")
+            print(f"     \033[90mReason: {s.get('reason', 'N/A')}\033[0m")
 
-        print("\n  --- DIFF ---")
+        print("\n   --- DIFF ---")
         original_code = original_code_files.get(file_path, "")
         if not original_code:
             print(f"\033[93mWarning: Could not find original code for {file_path} to create a diff.\033[0m")
         elif original_code == fixed_code:
-            print("\033[90m  (No difference in content)\033[0m")
+            print("\033[90m   (No difference in content)\033[0m")
         else:
             display_diff(original_code, fixed_code)
-        print("  ------------")
+        print("   ------------")
 
     print("\n" + "="*80)
     confirm = input("✅ Apply ALL the changes listed above? (yes/no): ").strip().lower()
@@ -298,7 +346,11 @@ def run_fix_command(path_or_dir: str, issue_description: str):
     print("\nApplying changes...")
     for change in fix_data["changes"]:
         file_path = change["file_path"]
-        fixed_code = change["fixed_code"]
+        fixed_code_escaped = change["fixed_code"]
+
+        # --- THIS IS THE FIX ---
+        # Decode the string to turn '\\n' into newlines and '\\"' into quotes
+        fixed_code_decoded = fixed_code_escaped.encode().decode('unicode_escape')
 
         if not os.path.exists(file_path):
             print(f"⚠️ Skipped: File '{file_path}' does not exist.")
@@ -313,7 +365,7 @@ def run_fix_command(path_or_dir: str, issue_description: str):
             
             # Apply changes
             with open(file_path, "w", encoding="utf-8") as f:
-                f.write(fixed_code)
+                f.write(fixed_code_decoded) # <--- Write the DECODED version
             print(f"✨ Successfully updated '{os.path.basename(file_path)}' (backup at {os.path.basename(backup_path)})")
         
         except Exception as e:
