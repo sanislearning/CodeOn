@@ -1,11 +1,18 @@
 def add(x, y):
+    # This function adds two numbers
     return x + y
 
 def subtract(x, y):
+    # This function subtracts two numbers
     return x - y
+
+def multiply(x, y):
+    # This function multiplies two numbers
+    return x * y
 
 
 def divide(x, y):
+    # This function divides two numbers
     if y == 0:
         return "Error: Division by zero."
     return x / y
@@ -16,10 +23,11 @@ def calculator():
     print("1. Add")
     print("2. Subtract")
     print("3. Divide")
+    print("4. Multiply")
 
-    choice = input("Enter choice (1/2/3): ")
+    choice = input("Enter choice (1/2/3/4): ")
 
-    if choice not in ('1', '2', '3'):
+    if choice not in ('1', '2', '3', '4'):
         print("Invalid input")
         return
 
@@ -36,6 +44,8 @@ def calculator():
         print("Result:", subtract(num1, num2))
     elif choice == '3':
         print("Result:", divide(num1, num2))
+    elif choice == '4':
+        print("Result:", multiply(num1, num2))
 
 if __name__ == "__main__":
     calculator()

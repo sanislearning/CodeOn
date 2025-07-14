@@ -22,12 +22,12 @@ print("🔍 Loading FAISS vector database...")
 vectordb = FAISS.load_local(
     "code_index_faiss",
     embedding,
-    allow_dangerous_deserialization=True
+    allow_dangerous_deserialization=True #will not work if I remove it, Pickle objects
 )
 
 retriever = vectordb.as_retriever(search_kwargs={"k": 10})
 
-print("⚡ Initializing Gemini Flash model...")
+print("Initializing Gemini Flash model...")
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 model = genai.GenerativeModel("gemini-2.0-flash")
 
@@ -35,6 +35,7 @@ model = genai.GenerativeModel("gemini-2.0-flash")
 HISTORY_PATH = "chat_history.json"
 MAX_HISTORY_LENGTH = 8  # Max past exchanges to keep before summarizing
 
+#context bloat is a genuine issue, this rectifies the problem to a large degree
 def load_history():
     if os.path.exists(HISTORY_PATH):
         with open(HISTORY_PATH, "r", encoding="utf-8") as f:
@@ -138,6 +139,10 @@ Important:
 - Extremely important to ensure the JSON is properly formatted and escaped
 - Keep descriptions concise (under 100 characters each)
 - The fixed_code should be the complete working code
+- Ensure all double quotes inside fixed_code are escaped as \"
+- You must escape characters as needed so the entire response is valid JSON
+- Do not use raw print("...") unless properly escaped
+
 
 Example format:
 {{
@@ -234,12 +239,14 @@ def validate_fix_response(fix_data):
     
     return True
 
+#Actual function that is initially called when you ask for a fix
 def run_fix_command(file_path, issue_description):
     """Run the fix command workflow"""
-    fix_data = propose_code_fix(file_path, issue_description)
+    fix_data = propose_code_fix(file_path, issue_description) #Calls the prompt creator that goes to the file and makes prompt and gets response
     if not fix_data:
         return
 
+    #extracts the date from the json response
     changes = fix_data.get("proposed_changes", [])
     fixed_code = fix_data.get("fixed_code", "")
 
