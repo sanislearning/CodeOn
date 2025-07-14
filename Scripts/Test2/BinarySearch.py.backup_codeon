@@ -1,31 +1,19 @@
 def BinarySearch(list1, low, high, key):
-    """
-    Searches for a key in a sorted list using binary search.
-
-    Args:
-        list1: The sorted list to search.
-        low: The starting index of the search space.
-        high: The ending index of the search space.
-        key: The value to search for.
-
-    Returns:
-        bool: True if the key is found, False otherwise.
-    """
-    if low > high:  # Checks if search space is invalid
+    if low > high:
         return False
 
-    middle = (high + low) // 2  # Calculate the middle index
+    middle = (high + low) // 2
 
-    if list1[middle] == key:  # Check if the middle element is the key
+    if list1[middle] == key:
         return True
-    elif list1[middle] > key:  # If the middle element is greater than the key, search the left half
+    elif list1[middle] > key:
         return BinarySearch(list1, low, middle - 1, key)
-    else:  # If the middle element is less than the key, search the right half
+    else:
         return BinarySearch(list1, middle + 1, high, key)
 
 
 list1 = [1, 2, 3, 4, 10, 5, 23, 89, 10, 100, 33, 40, 12, 35, 15]
-list1.sort()  # Sorts the list
+list1.sort()
 key = int(input("Enter the key to search: "))
 gender = input("Enter your gender (male/female/other): ").lower()
 if gender == "male":

@@ -175,16 +175,16 @@ IMPORTANT:
     try:
         print("🤖 Sending fix request to Gemini Flash...")
         #Added max_output_tokens to the generation config
-# In generate_fix_proposal function...
+
+
         response = model.generate_content(
-            fix_prompt,
-            generation_config=genai.GenerationConfig(
-                temperature=0.1,
-                max_output_tokens=8192,
-                # THIS IS THE CRUCIAL ADDITION
-                response_mime_type="application/json",
-            )
-        )
+                    fix_prompt,
+                    generation_config=genai.GenerationConfig(
+                        temperature=0.1,
+                        max_output_tokens=8192,
+                        response_mime_type="application/json",  #This forces the response to be JSON only
+                    )
+                )
         return response.text.strip()
     except Exception as e:
         print(f"❌ Error during Gemini API call: {e}")

@@ -1,17 +1,8 @@
 def LinearSearch(list1, key):
-    """Searches for a key in a list.
-
-    Args:
-        list1: The list to search.
-        key: The value to search for.
-
-    Returns:
-        The index of the key in the list, or -1 if not found.
-    """
-    list_length = len(list1) # Calculate the length of the list once
+    list_length = len(list1)
     if not list1:
         return -1
-    for i in range(list_length): # Use the pre-calculated length
+    for i in range(list_length):
         if list1[i] == key:
             return i
     return -1
