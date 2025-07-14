@@ -35,7 +35,7 @@ def load_code_from_file(filepath):
 def get_code_segment(code_bytes, node):
     return code_bytes[node.start_byte:node.end_byte].decode()
 
-def extract_docstring_from_body(body_node, code_bytes):
+def extract_docstring_from_body(body_node, code_bytes): #finds comments
     if len(body_node.children) > 0 and body_node.children[0].type == "expression_statement":
         expr_node = body_node.children[0]
         if expr_node.children and expr_node.children[0].type == "string":

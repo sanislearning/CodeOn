@@ -1,57 +1,166 @@
 [
   {
     "type": "function",
-    "name": "LinearSearch",
-    "code_chunk": "def LinearSearch(list1): \n    key=int(input())\n    for i in range(0,len(list1)):\n        if list1[i]==key:\n            print(f\"{key} found at index {i}\")\n            return\n    print(\"Value not found\")\n    return",
+    "name": "BinarySearch",
+    "code_chunk": "def BinarySearch(list1,low,high,key):\n    middle=(high+low)//2\n    if low>high:       #checks if search space is invalid\n        print(\"Value not present in list\")\n        return\n    elif list1[middle]==key:\n        print(f\"{key} has been found\")\n        return\n    elif list1[middle]>key:\n        high=middle-1\n        BinarySearch(list1,low,high,key)\n    elif list1[middle]<key:\n        low=middle+1\n        BinarySearch(list1,low,high,key)",
     "parent": null,
     "summary": "Function with no docstring",
-    "start_line": 1,
-    "end_line": 8,
-    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\LinearSearch.py"
+    "start_line": 4,
+    "end_line": 17,
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
   },
   {
     "type": "assignment",
-    "code_chunk": "key=int(input())",
-    "summary": "Variable assignment: key=int(input())",
-    "parent": "LinearSearch",
-    "start_line": 2,
-    "end_line": 2,
-    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\LinearSearch.py"
-  },
-  {
-    "type": "function_call",
-    "code_chunk": "print(f\"{key} found at index {i}\")",
-    "summary": "Function call: print(f\"{key} found at index {i}\")",
-    "parent": "LinearSearch",
+    "code_chunk": "middle=(high+low)//2",
+    "summary": "Variable assignment: middle=(high+low)//2",
+    "parent": "BinarySearch",
     "start_line": 5,
     "end_line": 5,
-    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\LinearSearch.py"
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
   },
   {
     "type": "function_call",
-    "code_chunk": "print(\"Value not found\")",
-    "summary": "Function call: print(\"Value not found\")",
-    "parent": "LinearSearch",
+    "code_chunk": "print(\"Value not present in list\")",
+    "summary": "Function call: print(\"Value not present in list\")",
+    "parent": "BinarySearch",
     "start_line": 7,
     "end_line": 7,
-    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\LinearSearch.py"
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "print(f\"{key} has been found\")",
+    "summary": "Function call: print(f\"{key} has been found\")",
+    "parent": "BinarySearch",
+    "start_line": 10,
+    "end_line": 10,
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "high=middle-1",
+    "summary": "Variable assignment: high=middle-1",
+    "parent": "BinarySearch",
+    "start_line": 13,
+    "end_line": 13,
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "BinarySearch(list1,low,high,key)",
+    "summary": "Function call: BinarySearch(list1,low,high,key)",
+    "parent": "BinarySearch",
+    "start_line": 14,
+    "end_line": 14,
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "low=middle+1",
+    "summary": "Variable assignment: low=middle+1",
+    "parent": "BinarySearch",
+    "start_line": 16,
+    "end_line": 16,
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "BinarySearch(list1,low,high,key)",
+    "summary": "Function call: BinarySearch(list1,low,high,key)",
+    "parent": "BinarySearch",
+    "start_line": 17,
+    "end_line": 17,
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
   },
   {
     "type": "assignment",
     "code_chunk": "list1=[1, 2, 3, 4, 10, 5, 23, 89, 10, 100, 33, 40, 12, 35, 15]",
     "summary": "Variable assignment: list1=[1, 2, 3, 4, 10, 5, 23, 89, 10, 100, 33, 40, 12, 35, 15]",
     "parent": null,
-    "start_line": 10,
-    "end_line": 10,
+    "start_line": 20,
+    "end_line": 20,
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "list1.sort()",
+    "summary": "Function call: list1.sort()",
+    "parent": null,
+    "start_line": 21,
+    "end_line": 21,
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "key=int(input())",
+    "summary": "Variable assignment: key=int(input())",
+    "parent": null,
+    "start_line": 22,
+    "end_line": 22,
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "BinarySearch(list1,0,len(list1)-1,key)",
+    "summary": "Function call: BinarySearch(list1,0,len(list1)-1,key)",
+    "parent": null,
+    "start_line": 23,
+    "end_line": 23,
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\BinarySearch.py"
+  },
+  {
+    "type": "function",
+    "name": "LinearSearch",
+    "code_chunk": "def LinearSearch(list1, key):\n    \"\"\"Searches for a key in a list.\n\n    Args:\n        list1: The list to search.\n        key: The value to search for.\n\n    Returns:\n        The index of the key in the list, or -1 if not found.\n    \"\"\"\n    if not list1:\n        return -1\n    for i in range(len(list1)):\n        if list1[i] == key:\n            return i\n    return -1",
+    "parent": null,
+    "summary": "\"\"\"Searches for a key in a list.\n\n    Args:\n        list1: The list to search.\n        key: The value to search for.\n\n    Returns:\n        The index of the key in the list, or -1 if not found.\n    \"\"\"",
+    "start_line": 1,
+    "end_line": 16,
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\LinearSearch.py"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "list1=[100, 5, 23, 89, 10, 100, 33, 40, 12, 35, 15, 2, 3, 4, 1, 55, 66, 77, 88, 99, 101, 102, 103, 104]",
+    "summary": "Variable assignment: list1=[100, 5, 23, 89, 10, 100, 33, 40, 12, 35, 15, 2, 3, 4, 1, 55, 66, 77, 88, 99, 101, 102, 103, 104]",
+    "parent": null,
+    "start_line": 18,
+    "end_line": 18,
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\LinearSearch.py"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "key=int(input())",
+    "summary": "Variable assignment: key=int(input())",
+    "parent": null,
+    "start_line": 19,
+    "end_line": 19,
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\LinearSearch.py"
+  },
+  {
+    "type": "assignment",
+    "code_chunk": "index = LinearSearch(list1, key)",
+    "summary": "Variable assignment: index = LinearSearch(list1, key)",
+    "parent": null,
+    "start_line": 20,
+    "end_line": 20,
     "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\LinearSearch.py"
   },
   {
     "type": "function_call",
-    "code_chunk": "LinearSearch(list1)",
-    "summary": "Function call: LinearSearch(list1)",
+    "code_chunk": "print(f\"{key} found at index {index}\")",
+    "summary": "Function call: print(f\"{key} found at index {index}\")",
     "parent": null,
-    "start_line": 11,
-    "end_line": 11,
+    "start_line": 22,
+    "end_line": 22,
+    "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\LinearSearch.py"
+  },
+  {
+    "type": "function_call",
+    "code_chunk": "print(\"Value not found\")",
+    "summary": "Function call: print(\"Value not found\")",
+    "parent": null,
+    "start_line": 24,
+    "end_line": 24,
     "filename": "D:\\AIProjects\\CodeOn\\Scripts\\Search\\LinearSearch.py"
   }
 ]

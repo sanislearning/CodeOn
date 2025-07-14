@@ -1,14 +1,24 @@
 def LinearSearch(list1, key):
+    """Searches for a key in a list.
+
+    Args:
+        list1: The list to search.
+        key: The value to search for.
+
+    Returns:
+        The index of the key in the list, or -1 if not found.
+    """
     if not list1:
-        print("Value not found")
-        return
-    for i in range(0,len(list1)):
-        if list1[i]==key:
-            print(f"{key} found at index {i}")
-            return
-    print("Value not found")
-    return
+        return -1
+    for i in range(len(list1)):
+        if list1[i] == key:
+            return i
+    return -1
     
-list1=[1, 2, 3, 4, 10, 5, 23, 89, 10, 100, 33, 40, 12, 35, 15]
+list1=[100, 5, 23, 89, 10, 100, 33, 40, 12, 35, 15, 2, 3, 4, 1, 55, 66, 77, 88, 99, 101, 102, 103, 104]
 key=int(input())
-LinearSearch(list1, key)
+index = LinearSearch(list1, key)
+if index != -1:
+    print(f"{key} found at index {index}")
+else:
+    print("Value not found")
