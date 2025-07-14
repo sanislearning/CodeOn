@@ -1,4 +1,3 @@
-
 # 🧠 CodeOn
 
 **CodeOn** is an intelligent CLI-based assistant that helps you **analyze**, **debug**, and **improve Python code** using large language models (LLMs). It combines semantic code search, conversational memory, and automatic fixing to streamline your development workflow.
@@ -15,20 +14,23 @@
 * 🔍 **Code understanding with Tree-sitter + FAISS**: Parses code into structured chunks
 * 📝 **Summarized history**: Smart truncation and summarization to keep context efficient
 * 💾 **Safe editing**: Creates backups before overwriting files
+* 📂 **Folder indexing**: Parse an entire folder (recursively) instead of just one file
 
 ---
 
 ## 📂 Folder Structure
 
 ```
+
 CodeOn/
-├── ask.py             # Main CLI for chat and fix modes
-├── chunk.py           # Tree-sitter parser + FAISS indexer
-├── chat_history.json  # Summarized memory for long-term context
-├── index_metadata.json# Metadata for code chunks
-├── .env               # API key config
+├── ask.py               # Main CLI for chat and fix modes
+├── chunk.py             # Tree-sitter parser + FAISS indexer
+├── chat\_history.json    # Summarized memory for long-term context
+├── index\_metadata.json  # Metadata for code chunks
+├── .env                 # API key config
 ├── ...
-```
+
+````
 
 ---
 
@@ -38,11 +40,11 @@ CodeOn/
 git clone https://github.com/yourusername/CodeOn.git
 cd CodeOn
 python -m venv venv
-source venv/bin/activate  # Or venv\Scripts\activate on Windows
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
-```
+````
 
-Create a `.env` file:
+Create a `.env` file with your API key:
 
 ```env
 GOOGLE_API_KEY=your_google_api_key
@@ -54,19 +56,23 @@ GOOGLE_API_KEY=your_google_api_key
 
 ### 🔹 Step 1: Index your code
 
-Before you can ask questions or request fixes, index the Python file:
+Before you can ask questions or request fixes, index your code with:
 
 ```bash
 python chunk.py path/to/your_script.py
 ```
 
-Example:
+✅ Code is parsed and indexed with Tree-sitter + FAISS
+
+#### 🗂 Index a whole folder
+
+You can also index an **entire folder**:
 
 ```bash
-python chunk.py Scripts/Search/LinearSearch.py
+python chunk.py path/to/your/folder/
 ```
 
-> ✅ Code parsed and indexed with Tree-sitter + FAISS
+This will recursively parse all `.py` files inside the folder and its subfolders.
 
 ---
 
@@ -78,19 +84,13 @@ Start the assistant:
 python ask.py
 ```
 
-Ask questions like:
+Example conversation:
 
 ```
 🧑 You: What does my code do?
-🧑 You: Can you point out inefficiencies?
-🧑 You: How can I improve the structure?
-```
-
-Example response:
-
-```
-🤖 CodeOn:
-Your code performs a linear search on a predefined list. It prompts the user for a key...
+🤖 CodeOn: Your code performs a linear search on a list. It prompts the user for a key...
+🧑 You: How can I improve it?
+🤖 CodeOn: You could pass the key as an argument instead of using input()...
 ```
 
 ---
@@ -111,7 +111,7 @@ python ask.py fix Scripts/Search/LinearSearch.py "Make the code more efficient"
 
 ```
 📋 Proposed Fixes:
-  1. Pass key as argument instead of input() inside function
+  1. Pass key as argument instead of input()
   2. Add early return if list is empty
   3. Update function call with key
 
@@ -161,9 +161,10 @@ LinearSearch(list1, key)
 
 ## 💡 Tips
 
-* Run `chunk.py` whenever you change or add a new Python file.
-* You can re-run `ask.py` anytime to enter chat mode again.
-* Fixes are safe: you get to preview and confirm before any code is changed.
+* Re-run `chunk.py` after changing or adding new Python files
+* You can enter chat mode anytime with `python ask.py`
+* Fixes are non-destructive — backups are created before changes
+* Chat history is stored and summarized for better LLM performance
 
 ---
 
@@ -179,7 +180,8 @@ LinearSearch(list1, key)
 
 ## 🛣️ Roadmap
 
-* [ ] Multi-file support and project-level understanding
-* [ ] Integration with Git for version control-aware fixes
-* [ ] VSCode extension for in-editor debugging
-* [ ] Additional LLMs via [LiteLLM](https://github.com/BerriAI/litellm)
+* [ ] Multi-file semantic reasoning
+* [ ] Git integration for version-aware patching
+* [ ] VSCode extension for real-time suggestions
+* [ ] Support for more LLMs
+
